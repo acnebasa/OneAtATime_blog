@@ -1,5 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * @property Post_model $Post_model
+ * @property Tag_model $Tag_model
+ * @property CI_Form_validation $form_validation
+ * @property CI_Input $input
+ * @property CI_Session $session
+ * @property CI_DB $db
+ */
 class Posts extends CI_Controller {
 
     public function __construct() {
