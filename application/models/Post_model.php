@@ -25,6 +25,15 @@ class Post_model extends CI_Model {
         return $this->db->get()->row_array();
     }
 
+    public function get_posts_by_user($user_id) {
+        $this->db->select('p.*, t.category as tag_name');
+        $this->db->from('Posts p');
+        $this->db->join('Tags t', 'p.tag_id = t.tag_id', 'left');
+        $this->db->where('p.user_id', $user_id);
+        $this->db->order_by('p.created_At', 'DESC');
+        return $this->db->get()->result_array();
+    }
+
     public function create_post($data) {
         $this->db->insert('posts', $data);
         return $this->db->insert_id();

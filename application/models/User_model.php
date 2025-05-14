@@ -13,6 +13,10 @@ class User_model extends CI_Model {
         return false; // No user found
     }
 
+    public function get_user_by_username($username) {
+        return $this->db->get_where('Users', array('user_name' => $username))->row_array();
+    }
+
     // Insert new user
     public function insert_user($data) {
         $insert = $this->db->insert('Users', $data);
