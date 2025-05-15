@@ -20,7 +20,7 @@ class Auth extends CI_Controller {
         $this->form_validation->set_rules('password', 'Password', 'required');
 
         if ($this->form_validation->run() == FALSE) {
-            $data['error'] = $this->session->flashdata('error');
+            $data['error'] = validation_errors();
             $this->load->view('auth/login', $data);
         } else {
             $username = $this->input->post('user_name');
@@ -28,11 +28,11 @@ class Auth extends CI_Controller {
 
             $user = $this->User_model->get_user($username);
 
-            if ($user && password_verify($password, $user->password)) {// In production, use password hashing
+            if ($user && password_verify($password, $user->password)) {
                 $this->session->set_userdata('user_id', $user->user_id);
-                redirect('welcome'); // Create a dashboard or homepage
+                redirect('auth/profile');
             } else {
-                $data['error'] = $this->session->flashdata('error');
+                $this->session->set_flashdata('error', 'Invalid username or password.');
                 redirect('auth/login');
             }
         }
@@ -42,25 +42,53 @@ class Auth extends CI_Controller {
         $this->form_validation->set_rules('user_name', 'Username', 'required|is_unique[Users.user_name]');
         $this->form_validation->set_rules('password', 'Password', 'required');
 
-    if ($this->form_validation->run() == FALSE) {
-        $data['error'] = validation_errors(); // Pass validation errors to the view
-        $this->load->view('auth/register', $data);
-    } else {
-        $data = [
-            'user_name' => $this->input->post('user_name'),
-            'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT)
-        ];
+        if ($this->form_validation->run() == FALSE) {
+            $data['error'] = validation_errors();
+            $this->load->view('auth/register', $data);
+        } else {
+            $data = [
+                'user_name' => $this->input->post('user_name'),
+                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'bio' => ''
+            ];
 
-        $this->User_model->insert_user($data);
+            $this->User_model->insert_user($data);
 
-        // Flash message will show after redirect
-        $this->session->set_flashdata('success', 'Registered successfully. Please login.');
-        redirect('auth/login');
+            $this->session->set_flashdata('success', 'Registered successfully. Please login.');
+            redirect('auth/login');
+        }
     }
-}
 
     public function logout() {
         $this->session->unset_userdata('user_id');
         redirect('auth/login');
+    }
+
+    public function profile() {
+        if (!$this->session->userdata('user_id')) {
+            redirect('auth/login');
+        }
+
+        $user_id = $this->session->userdata('user_id');
+        $user = $this->User_model->get_user_by_id($user_id);
+
+        $this->form_validation->set_rules('user_name', 'Username', 'required');
+        $this->form_validation->set_rules('bio', 'Bio', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required');
+        $this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[password]');
+
+        if ($this->form_validation->run() == FALSE) {
+            $data['user'] = $user;
+            $this->load->view('auth/profile', $data);
+        } else {
+            $data = [
+                'user_name' => $this->input->post('user_name'),
+                'bio' => $this->input->post('bio'),
+                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT)
+            ];
+            $this->User_model->update_user($user_id, $data);
+            $this->session->set_flashdata('success', 'Profile updated successfully.');
+            redirect('auth/profile');
+        }
     }
 }

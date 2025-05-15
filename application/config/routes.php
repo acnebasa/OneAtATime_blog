@@ -59,6 +59,9 @@ $route['admin/login'] = 'adminauth/login';
 $route['admin/logout'] = 'adminauth/logout';
 $route['admin/dashboard'] = 'admin/dashboard';
 
+//for profile routing
+$route['profile'] = 'auth/profile';
+
 // User Auth Routes
 $route['login'] = 'auth/login';
 $route['register'] = 'auth/register';
