@@ -115,6 +115,10 @@
         line-height: 1.6;
         color: #37474f;
         margin-bottom: 14px;
+        word-wrap: break-word;
+        /* Ensures long words break */
+        overflow-wrap: break-word;
+        /* Alternative for better support */
     }
 
     .post-tags {
