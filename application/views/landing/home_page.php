@@ -1,3 +1,60 @@
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f0f0f0;
+    }
+    .posts-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .post-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+        width: 100%;
+    }
+    .post-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+        color: #777;
+    }
+    .post-username {
+        font-weight: bold;
+        color: #333;
+    }
+    .post-time {
+        font-style: italic;
+    }
+    .post-content {
+        font-size: 1rem;
+        color: #444;
+        margin-bottom: 10px;
+    }
+    .post-tags {
+        margin-top: 10px;
+    }
+    .tag {
+        display: inline-block;
+        background: #e0e0e0;
+        color: #333;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        margin: 3px;
+    }
+</style>
+
 <div class="posts-container">
     <?php if (!empty($posts)): ?>
         <?php foreach ($posts as $post): ?>

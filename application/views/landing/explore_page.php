@@ -4,7 +4,7 @@
             <div class="post-card" data-post-id="<?= $post['post_id'] ?>">
                 <!-- Profile section -->
                 <div class="post-profile">
-                    <img src="<?= base_url('assets/images/default-profile.jpg') ?>" alt="Profile" class="profile-pic">
+                    <img src="<?= base_url('images/profile-user.png') ?>" alt="Profile" class="profile-pic">
                     <div>
                         <span class="post-username"><?= htmlspecialchars($post['user_name']) ?></span>
                         <span class="post-time"><?= date('M j, Y g:i A', strtotime($post['created_At'])) ?></span>
@@ -54,87 +54,96 @@
 </div>
 
 <style>
+    body {
+        background: #e0f7fa;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
     .posts-container {
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 0 15px;
+        max-width: 650px;
+        margin: 30px auto;
+        padding: 0 20px;
     }
 
     .post-card {
-        background: #fff;
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        background: #ffffff;
+        border: 2px solid #b2ebf2;
+        border-left: 6px solid #00acc1;
+        border-radius: 10px;
+        padding: 18px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        transition: transform 0.2s ease, background 0.3s ease;
     }
 
     .post-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: scale(1.01);
+        background: #f1fcfc;
     }
 
     .post-profile {
         display: flex;
         align-items: center;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
     }
 
     .profile-pic {
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
         object-fit: cover;
-        margin-right: 12px;
-        border: 2px solid #f0f0f0;
+        margin-right: 14px;
+        border: 2px solid #b2ebf2;
     }
 
     .post-username {
-        font-weight: 600;
-        color: #333;
+        font-weight: bold;
+        font-size: 16px;
+        color: #006064;
         display: block;
     }
 
     .post-time {
         font-size: 13px;
-        color: #888;
+        color: #607d8b;
     }
 
     .post-content {
-        margin-bottom: 15px;
-        line-height: 1.5;
-        color: #333;
         font-size: 15px;
+        line-height: 1.6;
+        color: #37474f;
+        margin-bottom: 14px;
     }
 
     .post-tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 15px;
+        gap: 6px;
+        margin-bottom: 14px;
     }
 
     .tag {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 16px;
+        background-color: #e0f2f1;
+        color: #00796b;
+        padding: 4px 10px;
+        border-radius: 14px;
         font-size: 12px;
         font-weight: 500;
-        background-color: #f0f5ff;
-        color: #3a7bd5;
         transition: all 0.2s ease;
     }
 
     .tag:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #b2dfdb;
+        transform: scale(1.05);
     }
 
     .post-footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-top: 1px solid #f0f0f0;
+        border-top: 1px solid #eeeeee;
         padding-top: 12px;
     }
 
@@ -147,39 +156,39 @@
     .like-button {
         background: none;
         border: none;
-        color: #666;
+        color: #00796b;
         cursor: pointer;
         display: flex;
         align-items: center;
         gap: 4px;
         padding: 4px 8px;
         border-radius: 4px;
-        transition: all 0.2s ease;
+        transition: background 0.2s ease, color 0.2s ease;
     }
 
     .like-button:hover {
-        background: #f8f8f8;
-        color: #e74c3c;
+        background: #e0f2f1;
+        color: #004d40;
     }
 
     .like-button.liked {
-        color: #e74c3c;
+        color: #d81b60;
     }
 
     .like-count {
         font-size: 13px;
-        color: #666;
+        color: #555;
     }
 
     .delete-post-btn {
-        background: #ffebee;
-        color: #d32f2f;
+        background: #ffe0e0;
+        color: #b71c1c;
         border: none;
-        padding: 4px 12px;
+        padding: 5px 10px;
         border-radius: 4px;
         font-size: 13px;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: background 0.2s ease;
     }
 
     .delete-post-btn:hover {
@@ -189,51 +198,52 @@
     .no-posts {
         text-align: center;
         padding: 40px;
-        color: #999;
+        color: #666;
         font-size: 16px;
     }
 
-    /* Specific tag colors */
+    /* Unique tag color coding (kept from original for consistency) */
     .tag[data-tag="travel"] {
-        background-color: #e3f2fd;
-        color: #1976d2;
+        background-color: #e1f5fe;
+        color: #0277bd;
     }
 
     .tag[data-tag="food"] {
         background-color: #e8f5e9;
-        color: #388e3c;
+        color: #2e7d32;
     }
 
     .tag[data-tag="technology"] {
-        background-color: #f3e5f5;
-        color: #8e24aa;
+        background-color: #ede7f6;
+        color: #5e35b1;
     }
 
     .tag[data-tag="books"] {
         background-color: #fff3e0;
-        color: #f57c00;
+        color: #ef6c00;
     }
 
     .tag[data-tag="fitness"] {
         background-color: #e0f7fa;
-        color: #00acc1;
+        color: #00838f;
     }
 
     .tag[data-tag="life"] {
         background-color: #fce4ec;
-        color: #c2185b;
+        color: #ad1457;
     }
 
     .tag[data-tag="inspiration"] {
         background-color: #fff8e1;
-        color: #ff8f00;
+        color: #f9a825;
     }
 
     .tag[data-tag="humor"] {
         background-color: #f1f8e9;
-        color: #689f38;
+        color: #558b2f;
     }
 </style>
+
 
 <script>
     // Like button functionality
