@@ -8,15 +8,15 @@ class Explore extends CI_Controller {
         $this->load->model('User_model');
         
         // Get current user (assuming bookworm is logged in)
-        $current_username = 'bookworm'; // Replace with session user in real implementation
-        $current_user = $this->User_model->get_user_by_username($current_username);
+        $user_id = $this->session->userdata('user_id'); // Replace with session user in real implementation
+        $current_user = $this->User_model->get_user_by_id($user_id);
         
         // Get posts from other users
         $data['posts'] = $this->Post_model->get_explore_posts($current_user['user_id'], 30);
         
         // Common data
         $data['page_title'] = 'Explore';
-        $data['username'] = $current_username;
+        $data['username'] = $current_user['user_name'];
         $data['active_tab'] = 'explore';
         
         $this->load->view('templates/header', $data);
