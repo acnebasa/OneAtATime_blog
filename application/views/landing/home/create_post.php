@@ -30,6 +30,7 @@
         <!-- Right Container (30%) -->
         <div class="right-container">
             <div class="date-greeting">
+                <?php date_default_timezone_set('Asia/Manila'); ?>
                 <h3><?php echo date('g:i A · M j, Y'); ?></h3>
                 <p>Hello, <?php echo $username ?? 'User'; ?>!</p>
             </div>
