@@ -24,9 +24,9 @@ class Admin extends CI_Controller {
     public function dashboard() {
         $data['title'] = 'Admin Dashboard';
         $this->load->view('admin/partial_header', $data);
-        $this->load->view('admin/partial_sidebar');
+        //$this->load->view('admin/partial_sidebar');
         $this->load->view('admin/dashboard');
-        // $this->load->view('admin/partial_footer');
+        //$this->load->view('admin/partial_footer');
     }
 
     public function post_management() {
