@@ -7,6 +7,20 @@
         <div class="main collapsed" id="main">
             <h2><i class="fas fa-file-alt"></i> Post Management</h2>
 
+            <!-- Tag Filter Form -->
+            <form method="get" action="<?= site_url('admin/posts') ?>" style="margin-bottom: 20px;">
+                <label for="tag_filter">Filter by Tag:</label>
+                <select id="tag_filter" name="tag" onchange="this.form.submit()">
+                    <option value="">All Tags</option>
+                    <?php foreach ($tags as $tag): ?>
+                        <option value="<?= $tag['tag_id'] ?>" <?= isset($_GET['tag']) && $_GET['tag'] == $tag['tag_id'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($tag['category']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </form>
+
+
             <?php if (!empty($posts)): ?>
                 <table class="admin-table">
                     <thead>

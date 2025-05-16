@@ -1,15 +1,9 @@
-TRUNCATE TABLE `Reactions`;
+
 
 -- Populate sample data
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Clear existing data
-TRUNCATE TABLE `Post_Tags`;
-TRUNCATE TABLE `Reactions`;
-TRUNCATE TABLE `Posts`;
-TRUNCATE TABLE `Tags`;
-TRUNCATE TABLE `Users`;
-TRUNCATE TABLE `Admin`;
+
 
 -- Insert sample users
 -- Plaintext passwords: test:test, achuchu2:achuchu, user3:user3, bookworm:bookworm
