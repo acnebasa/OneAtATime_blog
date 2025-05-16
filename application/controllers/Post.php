@@ -94,46 +94,80 @@ class Post extends CI_Controller
 
     public function like()
     {
-        $this->check_login();
+        // Verify AJAX request
+        if (!$this->input->is_ajax_request()) {
+            return $this->output
+                ->set_status_header(403)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'success' => false,
+                    'message' => 'Direct access not allowed'
+                ]));
+        }
+
+        // Verify logged in
+        if (!$user_id = $this->session->userdata('user_id')) {
+            return $this->output
+                ->set_status_header(401)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'success' => false,
+                    'message' => 'Please login first'
+                ]));
+        }
 
         $post_id = $this->input->post('post_id');
-        $user_id = $this->session->userdata('user_id');
 
-        // Check if user already liked this post
-        $existing_like = $this->db->get_where('reactions', [
-            'post_id' => $post_id,
-            'user_id' => $user_id
-        ])->row_array();
-
-        if (!$existing_like) {
-            // Add new like
-            $this->db->insert('reactions', [
-                'post_id' => $post_id,
-                'user_id' => $user_id,
-                'reaction' => 1
-            ]);
-
-            // Update reaction count
-            $this->Post_model->update_reaction_count($post_id);
-
-            echo json_encode([
-                'success' => true,
-                'new_count' => $this->Post_model->get_reaction_count($post_id)
-            ]);
-        } else {
-            // Unlike if already liked
-            $this->db->where([
+        try {
+            // Check if like exists
+            $existing = $this->db->get_where('reactions', [
                 'post_id' => $post_id,
                 'user_id' => $user_id
-            ])->delete('reactions');
+            ])->row();
 
-            $this->Post_model->update_reaction_count($post_id);
+            if ($existing) {
+                // Unlike
+                $this->db->where([
+                    'post_id' => $post_id,
+                    'user_id' => $user_id
+                ])->delete('reactions');
+                $action = 'unliked';
+            } else {
+                // Like
+                $this->db->insert('reactions', [
+                    'post_id' => $post_id,
+                    'user_id' => $user_id,
+                    'reaction' => 1,
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+                $action = 'liked';
+            }
 
-            echo json_encode([
-                'success' => true,
-                'new_count' => $this->Post_model->get_reaction_count($post_id),
-                'unliked' => true
-            ]);
+            // Get updated count
+            $count = $this->db->where('post_id', $post_id)
+                ->from('reactions')
+                ->count_all_results();
+
+            // Update post count
+            $this->db->where('post_id', $post_id)
+                ->update('posts', ['reaction_count' => $count]);
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'success' => true,
+                    'new_count' => $count,
+                    'action' => $action
+                ]));
+
+        } catch (Exception $e) {
+            return $this->output
+                ->set_status_header(500)
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'success' => false,
+                    'message' => 'Server error: ' . $e->getMessage()
+                ]));
         }
     }
 

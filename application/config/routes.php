@@ -77,3 +77,4 @@ $route['test'] = 'explore/testindex';
 // Create and Delete post
 $route['post/create'] = 'post/create';
 $route['post/delete'] = 'post/delete';
+$route['post/like'] = 'post/like';

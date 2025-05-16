@@ -11,10 +11,14 @@
                     <?php echo htmlspecialchars($post['content']); ?>
                 </div>
 
-                <?php if (!empty($post['tag_name'])): ?>
+                <?php
+                $post_tags = $this->Post_model->get_post_tags($post['post_id']);
+                if (!empty($post_tags)): ?>
                     <div class="post-tags">
-                        <?php foreach ($this->Post_model->get_post_tags($post['post_id']) as $tag): ?>
-                            <span class="tag"><?= $tag['category'] ?></span>
+                        <?php foreach ($post_tags as $tag): ?>
+                            <span class="tag" data-tag="<?= strtolower(htmlspecialchars($tag['category'])) ?>">
+                                <?= htmlspecialchars($tag['category']) ?>
+                            </span>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
@@ -176,5 +180,120 @@
         padding-top: 8px;
         font-size: 13px;
         color: #666;
+    }
+
+    .post-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: lowercase;
+        transition: all 0.2s ease;
+    }
+
+    /* Color variations for different tags */
+    .tag:nth-child(1n) {
+        background-color: #e3f2fd;
+        color: #1976d2;
+    }
+
+    /* Blue */
+    .tag:nth-child(2n) {
+        background-color: #e8f5e9;
+        color: #388e3c;
+    }
+
+    /* Green */
+    .tag:nth-child(3n) {
+        background-color: #f3e5f5;
+        color: #8e24aa;
+    }
+
+    /* Purple */
+    .tag:nth-child(4n) {
+        background-color: #fff3e0;
+        color: #f57c00;
+    }
+
+    /* Orange */
+    .tag:nth-child(5n) {
+        background-color: #ffebee;
+        color: #d32f2f;
+    }
+
+    /* Red */
+    .tag:nth-child(6n) {
+        background-color: #e0f7fa;
+        color: #00acc1;
+    }
+
+    /* Cyan */
+
+    /* Hover effects */
+    .tag:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Specific tag colors (optional - if you know your tag categories) */
+    .tag[data-tag="travel"] {
+        background-color: #bbdefb;
+        color: #0d47a1;
+    }
+
+    .tag[data-tag="food"] {
+        background-color: #c8e6c9;
+        color: #2e7d32;
+    }
+
+    .tag[data-tag="technology"] {
+        background-color: #d1c4e9;
+        color: #4527a0;
+    }
+
+    .tag[data-tag="books"] {
+        background-color: #ffccbc;
+        color: #bf360c;
+    }
+
+    .tag[data-tag="fitness"] {
+        background-color: #b2ebf2;
+        color: #006064;
+    }
+
+    .tag[data-tag="life"] {
+        background-color: #f8bbd0;
+        color: #880e4f;
+    }
+
+    .tag[data-tag="inspiration"] {
+        background-color: #d7ccc8;
+        color: #3e2723;
+    }
+
+    .tag[data-tag="humor"] {
+        background-color: #f0f4c3;
+        color: #827717;
+    }
+
+    /* If you want the first tag to stand out */
+    .post-tags .tag:first-child {
+        font-weight: bold;
+        padding: 4px 14px;
+    }
+
+    /* For dark mode compatibility */
+    @media (prefers-color-scheme: dark) {
+        .tag {
+            opacity: 0.9;
+        }
     }
 </style>

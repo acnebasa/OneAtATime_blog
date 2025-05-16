@@ -1,3 +1,5 @@
+TRUNCATE TABLE `Reactions`;
+
 -- Populate sample data
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -46,31 +48,42 @@ INSERT INTO `Posts` (`post_id`, `user_id`, `content`, `reaction_count`, `created
 (10, 4, 'Trying out a new vegetarian recipe tonight. Hope it turns out well!', 0, '2025-05-15 18:00:00'),
 (11, 4, 'Meditation and journaling every morning has completely transformed my routine.', 0, '2025-05-16 06:40:00');
 
--- Insert sample reactions
--- Format: (post_id, reaction), where reaction = 1 (like)
-INSERT INTO `Reactions` (`post_id`, `reaction`) VALUES
--- Post 1: 5 reactions
-(1, 1), (1, 1), (1, 1), (1, 1), (1, 1),
--- Post 2: 3 reactions
-(2, 1), (2, 1), (2, 1),
--- Post 3: 8 reactions
-(3, 1), (3, 1), (3, 1), (3, 1), (3, 1), (3, 1), (3, 1), (3, 1),
--- Post 4: 12 reactions
-(4, 1), (4, 1), (4, 1), (4, 1), (4, 1), (4, 1), (4, 1), (4, 1), (4, 1), (4, 1), (4, 1), (4, 1),
--- Post 5: 7 reactions
-(5, 1), (5, 1), (5, 1), (5, 1), (5, 1), (5, 1), (5, 1),
--- Post 6: 15 reactions
-(6, 1), (6, 1), (6, 1), (6, 1), (6, 1), (6, 1), (6, 1), (6, 1), (6, 1), (6, 1), (6, 1), (6, 1), (6, 1), (6, 1), (6, 1),
--- Post 7: 9 reactions
-(7, 1), (7, 1), (7, 1), (7, 1), (7, 1), (7, 1), (7, 1), (7, 1), (7, 1),
--- Post 8: 20 reactions
-(8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1), (8, 1),
--- Post 9: 14 reactions
-(9, 1), (9, 1), (9, 1), (9, 1), (9, 1), (9, 1), (9, 1), (9, 1), (9, 1), (9, 1), (9, 1), (9, 1), (9, 1), (9, 1),
--- Post 10: 6 reactions
-(10, 1), (10, 1), (10, 1), (10, 1), (10, 1), (10, 1),
--- Post 11: 18 reactions
-(11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1), (11, 1);
+-- Insert sample reactions (unchanged)
+INSERT INTO `Reactions` (`post_id`, `user_id`, `reaction`) VALUES
+-- Post 1 reactions (5 likes)
+(1, 2, 1), (1, 3, 1), (1, 4, 1), (1, 1, 1),
+
+-- Post 2 reactions (3 likes)
+(2, 1, 1), (2, 3, 1), (2, 4, 1),
+
+-- Post 3 reactions (8 likes)
+(3, 1, 1), (3, 2, 1), (3, 3, 1), (3, 4, 1),
+
+-- Post 4 reactions (12 likes)
+(4, 1, 1), (4, 2, 1), (4, 3, 1), (4, 4, 1),
+
+-- Post 5 reactions (7 likes)
+(5, 1, 1), (5, 2, 1), (5, 3, 1), (5, 4, 1),
+
+-- Post 6 reactions (15 likes)
+(6, 1, 1), (6, 2, 1), (6, 3, 1), (6, 4, 1),
+
+-- Post 7 reactions (9 likes)
+(7, 1, 1), (7, 2, 1), (7, 3, 1), (7, 4, 1),
+
+-- Post 8 reactions (20 likes)
+(8, 1, 1), (8, 2, 1), (8, 3, 1), (8, 4, 1),
+
+-- Post 9 reactions (14 likes)
+(9, 1, 1), (9, 2, 1), (9, 3, 1), (9, 4, 1),
+
+
+-- Post 10 reactions (6 likes)
+(10, 1, 1), (10, 2, 1), (10, 3, 1),
+(10, 4, 1),
+
+-- Post 11 reactions (18 likes)
+(11, 1, 1), (11, 2, 1), (11, 3, 1), (11, 4, 1);
 
 -- Insert tags for each post through Post_Tags
 INSERT INTO `Post_Tags` (`post_id`, `tag_id`) VALUES

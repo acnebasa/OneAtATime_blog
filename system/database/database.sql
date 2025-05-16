@@ -56,11 +56,16 @@ CREATE TABLE IF NOT EXISTS `Posts` (
 -- Reactions table
 CREATE TABLE IF NOT EXISTS `Reactions` (
   `react_id` int(11) NOT NULL AUTO_INCREMENT,
-  `reaction` int(11) NOT NULL DEFAULT 1,
   `post_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `reaction` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`react_id`),
+  UNIQUE KEY `post_user_unique` (`post_id`,`user_id`), -- Prevent duplicate likes
   KEY `post_id` (`post_id`),
-  CONSTRAINT `reactions_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `Posts` (`post_id`) ON DELETE CASCADE
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `reactions_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `Posts` (`post_id`) ON DELETE CASCADE,
+  CONSTRAINT `reactions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Post_Tags junction table
