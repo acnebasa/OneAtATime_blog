@@ -1,4 +1,3 @@
-
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -6,6 +5,7 @@
         padding: 0;
         background: #f0f0f0;
     }
+
     .posts-container {
         display: flex;
         flex-direction: column;
@@ -14,14 +14,16 @@
         max-width: 800px;
         margin: 0 auto;
     }
+
     .post-card {
         background: #fff;
         border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
         padding: 20px;
         width: 100%;
     }
+
     .post-header {
         display: flex;
         justify-content: space-between;
@@ -29,21 +31,26 @@
         font-size: 0.9rem;
         color: #777;
     }
+
     .post-username {
         font-weight: bold;
         color: #333;
     }
+
     .post-time {
         font-style: italic;
     }
+
     .post-content {
         font-size: 1rem;
         color: #444;
         margin-bottom: 10px;
     }
+
     .post-tags {
         margin-top: 10px;
     }
+
     .tag {
         display: inline-block;
         background: #e0e0e0;
@@ -83,12 +90,14 @@
                 <div class="post-footer">
                     <span class="reaction-count"><?php echo $post['reaction_count']; ?> likes</span>
 
-                    <!-- Add delete button - only show if user owns the post -->
-                    <?php if ($post['user_id'] == $this->session->userdata('user_id')): ?>
-                        <button class="delete-post-btn" onclick="confirmDelete(<?php echo $post['post_id']; ?>)">
-                            Delete
-                        </button>
-                    <?php endif; ?>
+                    <div class="post-actions">
+                        <?php if ($post['user_id'] == $this->session->userdata('user_id')): ?>
+                            <a href="<?php echo site_url('post/edit/' . $post['post_id']); ?>" class="edit-post-btn">Edit</a>
+                            <button class="delete-post-btn" onclick="confirmDelete(<?php echo $post['post_id']; ?>)">
+                                Delete
+                            </button>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -190,6 +199,25 @@
         /* Ensures long words break */
         overflow-wrap: break-word;
         /* Alternative for better support */
+    }
+
+    .post-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .edit-post-btn {
+        background: #e0f7fa;
+        color: #00acc1;
+        padding: 3px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .edit-post-btn:hover {
+        background: #b2ebf2;
     }
 
     .tag-bubble {

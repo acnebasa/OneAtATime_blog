@@ -171,6 +171,82 @@ class Post extends CI_Controller
         }
     }
 
+    public function edit($post_id)
+    {
+        // Check if user is logged in
+        if (!$user_id = $this->session->userdata('user_id')) {
+            redirect('auth/login');
+        }
+
+        // Load models
+        $this->load->model('Post_model');
+        $this->load->model('Tag_model');
+
+        // Get the post
+        $post = $this->Post_model->get_post_by_id($post_id);
+
+        // Verify post exists and belongs to user
+        if (!$post || $post['user_id'] != $user_id) {
+            show_error('You are not authorized to edit this post', 403);
+        }
+
+        // Get all available tags
+        $data['tags'] = $this->Tag_model->get_all_tags();
+        $data['post'] = $post;
+        $data['post_tags'] = $this->Post_model->get_post_tags($post_id);
+
+        // Load the edit form view
+        $this->load->view('landing/home/edit_post', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function update()
+    {
+        // Check if user is logged in
+        if (!$user_id = $this->session->userdata('user_id')) {
+            redirect('auth/login');
+        }
+
+        $post_id = $this->input->post('post_id');
+
+        // Verify post exists and belongs to user
+        $post = $this->Post_model->get_post_by_id($post_id);
+        if (!$post || $post['user_id'] != $user_id) {
+            show_error('You are not authorized to edit this post', 403);
+        }
+
+        // Load models
+        $this->load->model('Post_model');
+        $this->load->model('Tag_model');
+        $this->load->library('form_validation');
+
+        // Set validation rules
+        $this->form_validation->set_rules('content', 'Content', 'required|max_length[180]');
+        $this->form_validation->set_rules('tags', 'Tags', 'callback_validate_tags');
+
+        if ($this->form_validation->run() === FALSE) {
+            // Reload edit form with errors
+            $this->edit($post_id);
+        } else {
+            // Prepare updated post data
+            $post_data = array(
+                'content' => $this->input->post('content'),
+                'updated_At' => date('Y-m-d H:i:s')
+            );
+
+            // Update the post
+            $this->Post_model->update_post($post_id, $post_data);
+
+            // Handle tags
+            $tags = $this->input->post('tags');
+            $tag_ids = !empty($tags) ? explode(',', $tags) : [];
+            $this->Post_model->add_post_tags($post_id, $tag_ids);
+
+            // Redirect to home page with success message
+            $this->session->set_flashdata('success', 'Post updated successfully');
+            redirect('home');
+        }
+    }
     public function delete()
     {
         $this->check_login();
