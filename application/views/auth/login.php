@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -117,6 +118,7 @@
         }
     </style>
 </head>
+
 <body>
     <div>
         <img src="<?php echo base_url('images/logo.png'); ?>" alt="OneAtATime Logo" class="logo" onerror="this.style.display='none'; alert('Failed to load logo image. Please check the file path: images/logo.png');">
@@ -150,4 +152,5 @@
         <a href="<?= site_url('register') ?>" class="toggle-link">Don't have an account? Register</a>
     </div>
 </body>
+
 </html>

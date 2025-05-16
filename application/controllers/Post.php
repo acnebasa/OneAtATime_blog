@@ -1,61 +1,31 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Home extends CI_Controller
+class Post extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
+        $this->load->library('session');
         $this->load->model('Post_model');
-        $this->load->model('User_model');
         $this->load->model('Tag_model');
+        $this->load->model('User_model');
         $this->load->library('form_validation');
     }
 
-    public function index()
+    private function check_login()
     {
-        // Get current user from session (replace with your actual session handling)
-        $user_id = $this->session->userdata('user_id');
-        
-        if (!$user_id) {
+        if (!$this->session->userdata('user_id')) {
             redirect('auth/login');
         }
-
-        // Get current user data
-        $user = $this->User_model->get_user_by_id($user_id);
-        
-        // Get posts for this user with their tags
-        $data['posts'] = $this->Post_model->get_posts_by_user($user_id);
-        
-        // Add tags to each post
-        foreach ($data['posts'] as &$post) {
-            $post['tags'] = $this->Post_model->get_post_tags($post['post_id']);
-        }
-
-        // Common data for header
-        $data['tags'] = $this->Tag_model->get_all_tags();
-        $data['page_title'] = $user['user_name'] . '\'s Posts';
-        $data['username'] = $user['user_name'];
-        $data['active_tab'] = 'home';
-
-        // Load views
-        $this->load->view('templates/header', $data);
-        $this->load->view('landing/home/create_post', $data);
-        $this->load->view('landing/home_page', $data);
-        $this->load->view('templates/footer');
     }
 
     public function create()
     {
-        // Check if user is logged in
+        $this->check_login();
         $user_id = $this->session->userdata('user_id');
-        if (!$user_id) {
-            redirect('auth/login');
-        }
-
-        // Get user data
         $user = $this->User_model->get_user_by_id($user_id);
-        
+
         // Get all available tags for the dropdown
         $data['tags'] = $this->Tag_model->get_all_tags();
         $data['username'] = $user['user_name'];
@@ -66,7 +36,7 @@ class Home extends CI_Controller
         $this->form_validation->set_rules('tags', 'Tags', 'callback_validate_tags');
 
         if ($this->form_validation->run() === FALSE) {
-            // If validation fails, reload the page with errors
+            // Reload with errors
             $this->load->view('templates/header', $data);
             $this->load->view('landing/home/create_post', $data);
             $this->load->view('templates/footer');
@@ -88,12 +58,14 @@ class Home extends CI_Controller
                 $this->Post_model->add_post_tags($post_id, $tag_ids);
             }
 
-            // Redirect to home page
+            // Redirect to home page to refresh stuffs
             redirect('home');
         }
     }
 
     // Custom validation callback for tags
+    // THis is to ensure that before we send the data to the database,
+    // the tags are only 3, and exists in the database.
     public function validate_tags($tags)
     {
         if (empty($tags)) {
@@ -118,4 +90,74 @@ class Home extends CI_Controller
 
         return true;
     }
+
+
+    public function like()
+    {
+        $this->check_login();
+
+        $post_id = $this->input->post('post_id');
+        $user_id = $this->session->userdata('user_id');
+
+        // Check if user already liked this post
+        $existing_like = $this->db->get_where('reactions', [
+            'post_id' => $post_id,
+            'user_id' => $user_id
+        ])->row_array();
+
+        if (!$existing_like) {
+            // Add new like
+            $this->db->insert('reactions', [
+                'post_id' => $post_id,
+                'user_id' => $user_id,
+                'reaction' => 1
+            ]);
+
+            // Update reaction count
+            $this->Post_model->update_reaction_count($post_id);
+
+            echo json_encode([
+                'success' => true,
+                'new_count' => $this->Post_model->get_reaction_count($post_id)
+            ]);
+        } else {
+            // Unlike if already liked
+            $this->db->where([
+                'post_id' => $post_id,
+                'user_id' => $user_id
+            ])->delete('reactions');
+
+            $this->Post_model->update_reaction_count($post_id);
+
+            echo json_encode([
+                'success' => true,
+                'new_count' => $this->Post_model->get_reaction_count($post_id),
+                'unliked' => true
+            ]);
+        }
+    }
+
+    public function delete()
+    {
+        $this->check_login();
+
+        $post_id = $this->input->post('post_id');
+        $user_id = $this->session->userdata('user_id');
+
+        // Verify post exists and belongs to user
+        $post = $this->Post_model->get_post_by_id($post_id);
+
+        if (!$post || $post['user_id'] != $user_id) {
+            echo json_encode(['success' => false, 'message' => 'Post not found or not owned by user']);
+            return;
+        }
+
+        // Delete the post
+        if ($this->Post_model->delete_post($post_id)) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Database error']);
+        }
+    }
+
 }

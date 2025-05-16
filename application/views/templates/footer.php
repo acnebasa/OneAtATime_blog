@@ -12,6 +12,27 @@
     </div>
 </footer>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.querySelector('.post-textarea');
+    const counter = document.querySelector('.char-counter');
+    
+    if (textarea && counter) {
+        textarea.addEventListener('input', function() {
+            const remaining = 180 - this.value.length;
+            counter.textContent = remaining + ' characters remaining';
+            
+            // Optional: Change color when getting low
+            if (remaining < 20) {
+                counter.style.color = '#ff0000';
+            } else {
+                counter.style.color = '#666';
+            }
+        });
+    }
+});
+</script>
+
 <style>
     .app-footer {
         background-color: #f8f9fa;

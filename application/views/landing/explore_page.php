@@ -1,6 +1,46 @@
-<div class="content">
-    <h1>Discover New Content</h1>
-    <p>Browse trending posts and categories.</p>
+<div class="explore-container">
+    <?php if (!empty($posts)): ?>
+        <?php foreach ($posts as $post): ?>
+            <div class="post-card" data-post-id="<?php echo $post['post_id']; ?>">
+                <!-- Profile Picture Container -->
+                <div class="profile-container">
+                    <img src="<?php echo base_url('assets/images/default-profile.jpg'); ?>" alt="Profile" class="profile-pic">
+                </div>
+                
+                <!-- Content Container -->
+                <div class="content-container">
+                    <!-- Username and Date -->
+                    <div class="post-header">
+                        <span class="post-username"><?php echo $post['user_name']; ?></span>
+                        <span class="post-date"><?php echo date('M j, Y g:i A', strtotime($post['created_At'])); ?></span>
+                    </div>
+                    
+                    <!-- Post Content -->
+                    <div class="post-content">
+                        <?php echo htmlspecialchars($post['content']); ?>
+                    </div>
+                    
+                    <!-- Footer with Like Button and Tag -->
+                    <div class="post-footer">
+                        <div class="like-section">
+                            <button class="like-button">
+                                <i class="far fa-heart"></i> Like
+                            </button>
+                            <span class="like-count"><?php echo $post['reaction_count']; ?></span>
+                        </div>
+                        
+                        <?php if (!empty($post['tag_name'])): ?>
+                            <span class="post-tag"><?php echo $post['tag_name']; ?></span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <div class="no-posts">
+            <p>No posts to explore yet.</p>
+        </div>
+    <?php endif; ?>
 </div>
 
 <div class="posts-container">

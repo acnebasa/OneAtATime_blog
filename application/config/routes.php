@@ -63,11 +63,16 @@ $route['admin/dashboard'] = 'admin/dashboard';
 $route['profile'] = 'auth/profile';
 
 // User Auth Routes
+$route['default_controller'] = 'home';
 $route['login'] = 'auth/login';
 $route['register'] = 'auth/register';
 $route['logout'] = 'auth/logout';
 
 // Home Page Routes
-$route['default_controller'] = 'home';
 $route['home'] = 'home';
 $route['explore'] = 'explore';
+$route['test'] = 'explore/testindex';
+
+// Create and Delete post
+$route['post/create'] = 'post/create';
+$route['post/delete'] = 'post/delete';

@@ -30,7 +30,7 @@ class Auth extends CI_Controller {
 
             if ($user && password_verify($password, $user->password)) {
                 $this->session->set_userdata('user_id', $user->user_id);
-                redirect('auth/profile');
+                redirect('home');
             } else {
                 $this->session->set_flashdata('error', 'Invalid username or password.');
                 redirect('auth/login');

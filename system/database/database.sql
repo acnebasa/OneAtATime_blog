@@ -44,16 +44,13 @@ CREATE TABLE IF NOT EXISTS `Tags` (
 CREATE TABLE IF NOT EXISTS `Posts` (
   `post_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `tag_id` int(11) DEFAULT NULL,
   `created_At` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_At` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `content` varchar(180) NOT NULL,
   `reaction_count` int(11) DEFAULT 0,
   PRIMARY KEY (`post_id`),
   KEY `user_id` (`user_id`),
-  KEY `tag_id` (`tag_id`),
-  CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE,
-  CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`tag_id`) ON DELETE SET NULL
+  CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Reactions table
@@ -66,5 +63,10 @@ CREATE TABLE IF NOT EXISTS `Reactions` (
   CONSTRAINT `reactions_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `Posts` (`post_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Insert initial admin account (password should be hashed in real implementation)
-INSERT INTO `Admin` (`name`, `password`) VALUES ('admin', 'admin123');
+CREATE TABLE IF NOT EXISTS `Post_Tags` (
+  `post_id` int(11) NOT NULL,
+  `tag_id` int(11) NOT NULL,
+  PRIMARY KEY (`post_id`, `tag_id`),
+  FOREIGN KEY (`post_id`) REFERENCES `Posts` (`post_id`) ON DELETE CASCADE,
+  FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`tag_id`) ON DELETE CASCADE
+) ENGINE=InnoDB;
