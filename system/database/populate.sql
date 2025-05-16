@@ -13,11 +13,11 @@ TRUNCATE TABLE `Admin`;
 
 -- Insert sample users
 -- Plaintext passwords: test:test, achuchu2:achuchu, user3:user3, bookworm:bookworm
-INSERT INTO `Users` (`user_id`, `user_name`, `email`, `password`, `bio`, `acct_created`) VALUES
-(1, 'test', 'test@example.com', '$2y$10$tGLaKE1bBfLHUti5raeVIOeP071Due08wPBN5i/2Z4tP7wl5GGWpu', NULL, '2025-05-01'),
-(2, 'achuchu2', 'achuchu2@example.com', '$2y$10$xRRa4r6s0fx/OXLcYy95ouuRHzCX.PPuidoHJMxsiWJXMhuL0yXG6', NULL, '2025-05-02'),
-(3, 'user3', 'user3@example.com', '$2y$10$nPcOxuEwydKy4KnE/TBqzuXZ2llYQmO3B92E08dLIfkw5ntHWQ1a.', NULL, '2025-05-03'),
-(4, 'bookworm', 'bookworm@example.com', '$2y$10$fYEHtZhh11XnEoTiyDzzveuE.EzPf5yYV0K0zy/chEC1srfXjtCd2', NULL, '2025-05-04');
+INSERT INTO `Users` (`user_id`, `user_name`, `password`, `bio`, `acct_created`) VALUES
+(1, 'test', '$2y$10$tGLaKE1bBfLHUti5raeVIOeP071Due08wPBN5i/2Z4tP7wl5GGWpu', NULL, '2025-05-01'),
+(2, 'achuchu2', '$2y$10$xRRa4r6s0fx/OXLcYy95ouuRHzCX.PPuidoHJMxsiWJXMhuL0yXG6', NULL, '2025-05-02'),
+(3, 'user3','$2y$10$nPcOxuEwydKy4KnE/TBqzuXZ2llYQmO3B92E08dLIfkw5ntHWQ1a.', NULL, '2025-05-03'),
+(4, 'bookworm', '$2y$10$fYEHtZhh11XnEoTiyDzzveuE.EzPf5yYV0K0zy/chEC1srfXjtCd2', NULL, '2025-05-04');
 
 -- Insert admin account
 -- Plaintext password: admin:admin
