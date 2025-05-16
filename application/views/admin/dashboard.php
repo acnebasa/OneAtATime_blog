@@ -21,33 +21,80 @@
             background-color: #2f3542;
             position: fixed;
             height: 100%;
-            overflow: auto;
+            overflow: hidden;
             transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
         }
 
         .sidebar.collapsed {
-            width: 60px;
+            width: 70px;
+            cursor: pointer;
         }
 
-        .sidebar h2 {
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
             color: #fff;
-            text-align: center;
-            padding: 20px 0;
-            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #444;
+        }
+
+        .sidebar.collapsed .admin-text {
+            display: none;
+        }
+
+        .logo {
+            display: none;
+            font-size: 22px;
+        }
+
+        .sidebar.collapsed .logo {
+            display: inline-block;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: #fff;
             font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            margin-left: auto;
+        }
+
+        .sidebar.collapsed .toggle-btn {
+            display: none;
         }
 
         .sidebar a {
-            display: block;
+            display: flex;
+            align-items: center;
             color: #ccc;
             padding: 15px 20px;
             text-decoration: none;
             transition: background 0.3s, color 0.3s;
+            white-space: nowrap;
         }
 
         .sidebar a:hover {
             background-color: #57606f;
             color: #fff;
+        }
+
+        .sidebar a i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 25px;
+            text-align: center;
+        }
+
+        .sidebar.collapsed a span {
+            display: none;
         }
 
         .main {
@@ -57,64 +104,69 @@
         }
 
         .main.collapsed {
-            margin-left: 60px;
-        }
-
-        .toggle-btn {
-            position: absolute;
-            top: 15px;
-            left: 260px;
-            font-size: 20px;
-            background: #2f3542;
-            color: #fff;
-            padding: 8px 12px;
-            border: none;
-            cursor: pointer;
-            transition: left 0.3s;
-        }
-
-        .collapsed + .toggle-btn {
-            left: 70px;
+            margin-left: 70px;
         }
 
         @media screen and (max-width: 768px) {
             .sidebar {
-                width: 60px;
+                width: 70px;
             }
 
             .main {
-                margin-left: 60px;
-            }
-
-            .toggle-btn {
-                left: 70px;
+                margin-left: 70px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="sidebar" id="sidebar">
-        <h2 id="sidebar-title">Admin</h2>
-        <a href="<?= site_url('admin/posts') ?>">📄 Post Management</a>
-        <a href="<?= site_url('admin/users') ?>">👥 User Management</a>
-        <a href="<?= site_url('admin/logout') ?>">🚪 Logout</a>
+    <div class="sidebar collapsed" id="sidebar" onclick="handleSidebarClick(event)">
+        <div class="sidebar-header">
+            <span class="logo">🧭</span>
+            <span class="admin-text">Admin</span>
+            <button class="toggle-btn" id="toggleBtn" onclick="toggleSidebar(event)">☰</button>
+        </div>
+        
+        <a href="<?= site_url('admin/dashboard') ?>">
+            <i>📌</i><span>Dashboard</span>
+        </a>
+        <a href="<?= site_url('admin/posts') ?>">
+            <i>📄</i><span>Post Management</span>
+        </a>
+        <a href="<?= site_url('admin/users') ?>">
+            <i>👥</i><span>User Management</span>
+        </a>
+        <a href="<?= site_url('admin/logout') ?>">
+            <i>🚪</i><span>Logout</span>
+        </a>
     </div>
 
-    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
-
-    <div class="main" id="main">
+    <div class="main collapsed" id="main">
         <h2>Welcome to the Admin Dashboard</h2>
-        <p>Use the sidebar to navigate between sections.</p>
+        <p>Use the sidebar to manage posts and users.</p>
     </div>
 
     <script>
-        function toggleSidebar() {
-            var sidebar = document.getElementById("sidebar");
-            var main = document.getElementById("main");
+        function toggleSidebar(e) {
+            e.stopPropagation(); // Prevent sidebar click from triggering uncollapse again
+            const sidebar = document.getElementById("sidebar");
+            const main = document.getElementById("main");
             sidebar.classList.toggle("collapsed");
             main.classList.toggle("collapsed");
         }
+
+        function handleSidebarClick(event) {
+            const sidebar = document.getElementById("sidebar");
+            const main = document.getElementById("main");
+            const isCollapsed = sidebar.classList.contains("collapsed");
+
+            // Only expand if it's collapsed and not clicking the toggle button itself
+            if (isCollapsed && !event.target.closest(".toggle-btn")) {
+                sidebar.classList.remove("collapsed");
+                main.classList.remove("collapsed");
+            }
+        }
     </script>
+
 </body>
 </html>
