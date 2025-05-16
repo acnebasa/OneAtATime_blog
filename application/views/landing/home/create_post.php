@@ -118,14 +118,14 @@
 
     .main-content-container {
         display: flex;
-        max-width: 500px;
+        max-width: 650px;
         margin: 8px auto;
         margin-bottom: 100px;
         gap: 12px;
     }
 
     .left-container {
-        flex: 7;
+        flex: 30;
         background: #fff;
         border-radius: 12px;
         padding: 10px;
@@ -133,7 +133,7 @@
     }
 
     .right-container {
-        flex: 3;
+        flex: 10;
         background: #f8f9fa;
         border-radius: 12px;
         padding: 10px;
