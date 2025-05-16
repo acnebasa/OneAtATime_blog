@@ -96,7 +96,26 @@ class Admin extends CI_Controller {
         // Redirect back to the user management page
         redirect('admin/users');
 }
-
+    public function posts() {
+        $data['title'] = 'Post Management';
+        $query = $this->db->query("
+            SELECT 
+                p.post_id AS id,
+                u.user_name AS username,
+                p.content,
+                GROUP_CONCAT(t.category ORDER BY t.category) AS tag_name,
+                p.created_At,
+                p.reaction_count
+            FROM Posts p
+            INNER JOIN Users u ON p.user_id = u.user_id
+            LEFT JOIN Post_Tags pt ON p.post_id = pt.post_id
+            LEFT JOIN Tags t ON pt.tag_id = t.tag_id
+            GROUP BY p.post_id, u.user_name, p.content, p.created_At, p.reaction_count
+            ORDER BY p.created_At DESC
+        ");
+        $data['posts'] = $query->result_array();
+        $this->load->view('admin/post_management', $data);
+    }
 
 }
 

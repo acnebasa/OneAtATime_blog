@@ -1,21 +1,20 @@
--- Database: oneatatime
 DROP DATABASE IF EXISTS `oneatatime`;
-
 CREATE DATABASE IF NOT EXISTS `oneatatime` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
 USE `oneatatime`;
 
 -- Drop existing tables if they exist
-DROP TABLE IF EXISTS `Admin`;
-DROP TABLE IF EXISTS `Users`;
-DROP TABLE IF EXISTS `Tags`;
-DROP TABLE IF EXISTS `Posts`;
+DROP TABLE IF EXISTS `Post_Tags`;
 DROP TABLE IF EXISTS `Reactions`;
+DROP TABLE IF EXISTS `Posts`;
+DROP TABLE IF EXISTS `Tags`;
+DROP TABLE IF EXISTS `Users`;
+DROP TABLE IF EXISTS `Admin`;
 
 -- Admin table
 CREATE TABLE IF NOT EXISTS `Admin` (
   `admin_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL UNIQUE,
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`admin_id`),
   UNIQUE KEY `name` (`name`)
@@ -25,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `Admin` (
 CREATE TABLE IF NOT EXISTS `Users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL UNIQUE,
   `password` varchar(255) NOT NULL,
   `bio` varchar(180) DEFAULT NULL,
   `acct_created` date NOT NULL DEFAULT CURRENT_DATE,
@@ -63,10 +63,11 @@ CREATE TABLE IF NOT EXISTS `Reactions` (
   CONSTRAINT `reactions_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `Posts` (`post_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Post_Tags junction table
 CREATE TABLE IF NOT EXISTS `Post_Tags` (
   `post_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL,
   PRIMARY KEY (`post_id`, `tag_id`),
   FOREIGN KEY (`post_id`) REFERENCES `Posts` (`post_id`) ON DELETE CASCADE,
   FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`tag_id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
