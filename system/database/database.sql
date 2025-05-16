@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS `Reactions`;
 CREATE TABLE IF NOT EXISTS `Admin` (
   `admin_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `password` varchar(16) NOT NULL,
+  `password` varchar(255) NOT NULL,
   PRIMARY KEY (`admin_id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS `Admin` (
 CREATE TABLE IF NOT EXISTS `Users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(50) NOT NULL,
-  `password` varchar(16) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `bio` varchar(180) DEFAULT NULL,
   `acct_created` date NOT NULL DEFAULT CURRENT_DATE,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_name` (`user_name`)

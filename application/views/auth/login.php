@@ -147,7 +147,7 @@
             <button type="submit">Login</button>
         </form>
 
-        <a href="<?= site_url('auth/register') ?>" class="toggle-link">Don't have an account? Register</a>
+        <a href="<?= site_url('register') ?>" class="toggle-link">Don't have an account? Register</a>
     </div>
 </body>
 </html>
